@@ -3,6 +3,9 @@ import '@nomiclabs/hardhat-etherscan'
 import '@nomiclabs/hardhat-waffle'
 import 'hardhat-typechain'
 import 'hardhat-watcher'
+import 'hardhat-deploy'
+import fs from 'fs'
+const privateKey = fs.readFileSync('.secret').toString().trim()
 
 const LOW_OPTIMIZER_COMPILER_SETTINGS = {
   version: '0.7.6',
@@ -78,6 +81,26 @@ export default {
     optimism: {
       url: `https://optimism-mainnet.infura.io/v3/${process.env.INFURA_API_KEY}`,
     },
+    aeneid: {
+      url: 'https://aeneid.storyrpc.io',
+      chainId: 1315,
+      throwOnTransactionFailures: true,
+      gasPrice: 'auto',
+      accounts: [privateKey],
+      gas: 4000000,
+      timeout: 120000,
+      allowUnlimitedContractSize: true,
+    },
+    story: {
+      url: 'https://mainnet.storyrpc.io',
+      chainId: 1514,
+      throwOnTransactionFailures: true,
+      gasPrice: 'auto',
+      accounts: [privateKey],
+      gas: 4000000,
+      timeout: 120000,
+      allowUnlimitedContractSize: true,
+    },
   },
   etherscan: {
     // Your API key for Etherscan
@@ -100,5 +123,14 @@ export default {
       files: ['./test/**/*'],
       verbose: true,
     },
+  },
+  namedAccounts: {
+    deployer: {
+      default: 0,
+    },
+  },
+  paths: {
+    deploy: 'scripts/aeneid',
+    deployments: 'deployments',
   },
 }
